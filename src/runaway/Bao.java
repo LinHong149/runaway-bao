@@ -28,13 +28,14 @@ public class Bao {
     }
     
     public void draw(){
-        app.fill(100);
         app.ellipse(x, y, 40, 30);
     }
     
+    
+    
     public boolean isCollidingWith(Obstacle other){
-        int centerX = x+(image.pixelWidth/2);
-        int centerY = y+(image.pixelHeight/2);
+        int centerX = x+(width/2);
+        int centerY = y+(height/2);
         int otherCenterX = other.x+(other.width/2);
         int otherCenterY = other.y+(other.height/2);
         
@@ -43,6 +44,20 @@ public class Bao {
         return d<72;
   
     } 
+    
+    
+    public boolean isCollidingWith(Goal other){
+        int centerX = x+(width/2);
+        int centerY = y+(height/2);
+        int otherCenterX = other.x+(other.width/2);
+        int otherCenterY = other.y+(other.height/2);
+        
+        float d = PApplet.dist(otherCenterX, otherCenterY, centerX, centerY);
+        
+        return d<72;
+  
+    } 
+   
    
     
 //    public boolean isClicked(int mouseX, int mouseY){

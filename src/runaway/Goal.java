@@ -11,12 +11,12 @@ import processing.core.PImage;
  *
  * @author linhong
  */
-public class Obstacle {
+public class Goal {
     public int x, y;
     public int width = 72, height = 72;
     private PApplet app;
     private PImage image;
-    public Obstacle(PApplet p, int x, int y, String path){
+    public Goal(PApplet p, int x, int y, String path){
         this.app = p;
         this.x = x;
         this.y = y;
@@ -29,8 +29,7 @@ public class Obstacle {
 //    }
     
     public void draw(){
-//        app.fill(200);
+        app.fill(0, 200, 0);
         app.ellipse(x, y, width, height);
     }
-    
 }

@@ -32,14 +32,6 @@ public class Level {
     }
     
     public void loadLevel(){
-//        app.fill(100);
-//        boolean unlocked = false;
-//        for(int i : completed){
-//            if (i == level-1){
-//                unlocked = true;
-//            }
-//        }
-//        if (!unlocked) return;
     }
     
     public void loadPrelude(){
@@ -58,7 +50,20 @@ public class Level {
             System.out.println(e);
         }
         
-        app.text(info[0], 10, 10);
+        app.textSize(40);
+        app.text(info[0], 160, 100);
+        
+        app.textSize(32);
+        app.text("Mission", 160, 180);
+        app.textSize(20);
+        app.text(info[1], 160, 200, 400, 500);
+        
+        app.textSize(32);
+        app.text("Objective", 650, 180);
+        app.textSize(20);
+        app.text(info[2], 650, 200, 400, 500);
+        
+        app.text("Press Enter to start", 800-280, 800-100);
     }
     
     public void draw(){

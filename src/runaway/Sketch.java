@@ -22,10 +22,11 @@ public class Sketch extends PApplet{
     private Level level;
     private boolean levelInited = false;
     private boolean continueActivated = false;
+    private boolean inPrelude = true;
 
 
     public void settings() {
-      size(400, 400);
+      size(1200,800);
     }
 
     public void setup() {
@@ -42,19 +43,22 @@ public class Sketch extends PApplet{
             System.out.println("0");
             background(255);
             fill(0);
-            text("Enter text: ", 20, 50);
+            text("Choose Level: ", 20, 50);
             text(userInput, 20, 100);
             break;
         case 1:
             background(255);
-            if (!levelInited){
+            if (inPrelude){
                 level = new Level1(this);
                 level.loadPrelude();
                 levelInited = true;
                 continueActivated = true; // loads level
             }
+            else {
             level.loadLevel();
-            System.out.println("1");
+                
+            }
+//            System.out.println("1");
             
             
             break;
@@ -103,6 +107,7 @@ public class Sketch extends PApplet{
     
     if (continueActivated && keyCode == ENTER){
         continueActivated =false;
+        inPrelude = false;
         level.loadLevel();
     }
     
