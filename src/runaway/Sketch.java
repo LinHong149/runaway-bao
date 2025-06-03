@@ -16,11 +16,13 @@ import static processing.core.PConstants.UP;
  * @author linhong
  */
 public class Sketch extends PApplet{
-    private Bao bao; 
     private int currLevel = 0;
     private boolean showInfo = false;
     private String userInput = "";
     private Level level;
+    private boolean levelInited = false;
+    private boolean continueActivated = false;
+
 
     public void settings() {
       size(400, 400);
@@ -29,9 +31,9 @@ public class Sketch extends PApplet{
     public void setup() {
       background(255);
       textSize(20);
-      level = new Level(0);
+      level = new Level(this,0);
       
-      bao = new Bao(this, 100, 100, ""); 
+//      bao = new Bao(this, 100, 100, ""); 
     }
 
     public void draw() {
@@ -44,9 +46,17 @@ public class Sketch extends PApplet{
             text(userInput, 20, 100);
             break;
         case 1:
-            System.out.println("1");
             background(255);
-            level.loadPrelude();
+            if (!levelInited){
+                level = new Level1(this);
+                level.loadPrelude();
+                levelInited = true;
+                continueActivated = true; // loads level
+            }
+            level.loadLevel();
+            System.out.println("1");
+            
+            
             break;
       }
       
@@ -90,6 +100,16 @@ public class Sketch extends PApplet{
            userInput+=key;
         }
     } 
+    
+    if (continueActivated && keyCode == ENTER){
+        continueActivated =false;
+        level.loadLevel();
+    }
+    
+    if (level instanceof Level1){
+    level.keyPressed();
+        
+    }
   }
 //
 //    public void drawCollisions(){

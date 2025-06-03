@@ -19,7 +19,7 @@ public class Bao {
         this.app = p;
         this.x = x;
         this.y = y;
-       image = app.loadImage(path);
+//       image = app.loadImage(path);
     }
     
     public void move (int dx, int dy){
