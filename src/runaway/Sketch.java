@@ -43,6 +43,7 @@ public class Sketch extends PApplet{
             System.out.println("0");
             background(255);
             fill(0);
+            textAlign(LEFT, BASELINE);
             text("Choose Level: ", 20, 50);
             text(userInput, 20, 100);
             break;
@@ -115,6 +116,16 @@ public class Sketch extends PApplet{
     level.keyPressed();
         
     }
+  }
+    
+  public void returnToMenu(){
+      currLevel = 0;
+      level = new Level(this,0);
+       levelInited = false;
+       continueActivated = false;
+       inPrelude = true;
+       userInput = "";
+      
   }
 //
 //    public void drawCollisions(){

@@ -18,13 +18,14 @@ import static processing.core.PConstants.DOWN;
 import static processing.core.PConstants.LEFT;
 import static processing.core.PConstants.RIGHT;
 import static processing.core.PConstants.UP;
+import static processing.core.PConstants.ENTER;
 
 public class Level1 extends Level {
     private Bao bao;
     private Obstacle[] o = new Obstacle[12];
     private Goal goal;
     private PApplet app;
-    
+    private boolean gameOver =false;
     public Level1(PApplet app){
         super(app, 1);
         this.app = app;
@@ -63,17 +64,55 @@ public class Level1 extends Level {
           } else {
             bao.move(0, 0);
           }
+          
+          if (gameOver && app.keyCode == ENTER){
+              ((Sketch)app).returnToMenu();
+          }
       }
     }
     
     public void drawCollisions(){
         if (bao.isCollidingWith(goal)){
-            System.out.println("win game");
+            winScreen();
         }
         for (Obstacle ob : o){
             if (ob != null && bao.isCollidingWith(ob)){
-                System.out.println("end game");
+                endScreen();
             }
         }
+    }
+    
+    public void winScreen(){
+        gameOver = true;
+        app.background(255);
+        app.fill(100);
+        
+        app.textAlign(PApplet.CENTER, PApplet.CENTER);
+        
+        app.textSize(40);
+        app.text("You Win!", app.width/2, 100);
+        
+        app.textSize(20);
+        app.text("After eating the dumpling, Bao is satisfied and goes back to bed.", app.width/2, 200);
+        
+        app.textSize(20);
+        app.text("Press Enter to exit", app.width/2, 800-100);
+    }
+    
+    
+    public void endScreen(){
+        gameOver = true;
+        app.background(255);
+        app.fill(100);
+        
+        app.textAlign(PApplet.CENTER, PApplet.CENTER);
+        app.textSize(40);
+        app.text("Oh no!", app.width/2, 100);
+        
+        app.textSize(20);
+        app.text("How clumsy Bao is! Mom woke up and is coming down now...", app.width/2, 200);
+        
+        app.textSize(20);
+        app.text("Press Enter to exit", app.width/2, 800-100);
     }
 }
