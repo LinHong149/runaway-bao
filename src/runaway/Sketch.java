@@ -73,6 +73,19 @@ public class Sketch extends PApplet{
                 
             }
             break;
+        case 3:
+            background(255);
+            if (inPrelude){
+                level = new Level3(this);
+                level.loadPrelude();
+                levelInited = true;
+                continueActivated = true; // loads level
+            }
+            else {
+            level.loadLevel();
+                
+            }
+            break;
       }
       
       
@@ -122,7 +135,7 @@ public class Sketch extends PApplet{
         level.loadLevel();
     }
     
-    if (level instanceof Level1 || level instanceof Level2){
+    if (level != null){
     level.keyPressed();
         
     }

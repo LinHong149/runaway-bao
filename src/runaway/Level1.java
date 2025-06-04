@@ -52,7 +52,7 @@ public class Level1 extends Level {
     }
     
     public void keyPressed(){
-        if (app.keyPressed && !gameOver) {
+        if (app.keyPressed) {
           if (app.keyCode == LEFT) {
             bao.move(-1, 0);
           } else if (app.keyCode == RIGHT) {

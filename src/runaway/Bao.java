@@ -29,6 +29,19 @@ public class Bao {
         y += dy*speed;
     }
     
+    public void moveTo(int x, int y){
+            if (this.x > x){
+                this.x --;
+            } else{
+                this.x++;
+            }
+           if (this.y > y){
+                this.y --;
+            } else{
+                this.y++;
+            }
+    }
+    
     public void draw(){
         app.ellipse(x, y, 40, 30);
     }

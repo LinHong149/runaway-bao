@@ -32,4 +32,18 @@ public class Goal {
         app.fill(0, 200, 0);
         app.ellipse(x, y, width, height);
     }
+    
+      
+    public boolean isClicked(int mouseX, int mouseY){
+        int centerX = x+(width/2);
+        int centerY = y+(height/2);
+        float d = PApplet.dist(mouseX, mouseY, centerX, centerY);
+        System.out.println(d<16);
+        System.out.println(mouseX);
+        System.out.println(mouseY);
+        System.out.println(centerX);
+        System.out.println(centerY);
+        return d<width;
+        
+    }
 }
