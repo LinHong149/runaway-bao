@@ -15,16 +15,18 @@ public class Bao {
     public int width = 72, height = 72;
     private PApplet app;
     private PImage image;
-    public Bao(PApplet p, int x, int y, String path){
+    private int speed;
+    public Bao(PApplet p, int x, int y, int speed, String path){
         this.app = p;
         this.x = x;
         this.y = y;
+        this.speed = speed;
 //       image = app.loadImage(path);
     }
     
     public void move (int dx, int dy){
-        x += dx;
-        y += dy;
+        x += dx*speed;
+        y += dy*speed;
     }
     
     public void draw(){

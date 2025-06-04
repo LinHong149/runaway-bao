@@ -16,10 +16,9 @@ import static processing.core.PConstants.UP;
  * @author linhong
  */
 public class Sketch extends PApplet{
-    private int currLevel = 0;
-    private boolean showInfo = false;
-    private String userInput = "";
     private Level level;
+    private int currLevel = 0;
+    private String userInput = "";
     private boolean levelInited = false;
     private boolean continueActivated = false;
     private boolean inPrelude = true;
@@ -40,7 +39,7 @@ public class Sketch extends PApplet{
     public void draw() {
       switch (currLevel) {
         case 0:
-            System.out.println("0");
+//            System.out.println("0");
             background(255);
             fill(0);
             textAlign(LEFT, BASELINE);
@@ -59,9 +58,20 @@ public class Sketch extends PApplet{
             level.loadLevel();
                 
             }
-//            System.out.println("1");
+            break;
             
-            
+        case 2:
+            background(255);
+            if (inPrelude){
+                level = new Level2(this);
+                level.loadPrelude();
+                levelInited = true;
+                continueActivated = true; // loads level
+            }
+            else {
+            level.loadLevel();
+                
+            }
             break;
       }
       
@@ -112,13 +122,14 @@ public class Sketch extends PApplet{
         level.loadLevel();
     }
     
-    if (level instanceof Level1){
+    if (level instanceof Level1 || level instanceof Level2){
     level.keyPressed();
         
     }
   }
     
   public void returnToMenu(){
+      System.out.println("returning to main");
       currLevel = 0;
       level = new Level(this,0);
        levelInited = false;

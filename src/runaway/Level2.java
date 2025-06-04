@@ -20,51 +20,66 @@ import static processing.core.PConstants.RIGHT;
 import static processing.core.PConstants.UP;
 import static processing.core.PConstants.ENTER;
 
-public class Level1 extends Level {
+public class Level2 extends Level {
     private Bao bao;
     private Obstacle[] o = new Obstacle[12];
     private Goal goal;
     private PApplet app;
     private boolean gameOver =false;
-    public Level1(PApplet app){
-        super(app, 1);
+    private int startTime = -1;
+    private int elapsedTime = 0;
+    private final int WIN_DURATION = 60_000;
+    
+    public Level2(PApplet app){
+        super(app, 2);
         this.app = app;
-        bao = new Bao(app, 100, 100, 5, ""); 
-        goal = new Goal(app, 400, 400, "");
-        o[0] = new Obstacle(app, 200, 200, "");
-        o[1] = new Obstacle(app, 100, 200, "");
-        o[2] = new Obstacle(app, 200, 100, "");
-        o[3] = new Obstacle(app, 200, 300, "");
+        bao = new Bao(app, 100, 100, 8 , ""); 
+        o[0] = new Obstacle(app, 1800, 200, "");
+        o[1] = new Obstacle(app, 1800, 200, "");
+        o[2] = new Obstacle(app, 1800, 100, "");
+        o[3] = new Obstacle(app, 1800, 300, "");
+        goal = new Goal(app, 1150, 400, "");
     }
     
     @Override
     public void loadLevel(){
+        if (startTime == -1){
+            startTime = app.millis();
+        }
+        
+        elapsedTime = app.millis() - startTime;
+        if (!gameOver && elapsedTime >= WIN_DURATION){
+            winScreen();
+            return;
+                   }
 //        super.loadLevel();
 //        System.out.println("Loading level");
         app.fill(100);
+        app.textSize(20);
+        app.text("Time Left: "+Math.max(0, (WIN_DURATION-elapsedTime)/1000), 1050, 50);
+        
+        
         bao.draw();
-        o[0].draw();
-        o[1].draw();
-        o[2].draw();
-        o[3].draw();
-        goal.draw();
+        if (!gameOver){
+            
+        o[0].fly(8);
+        o[1].fly(6);
+        o[2].fly(5);
+        o[3].fly(7);
+        
+        }
         drawCollisions();
     }
     
     public void keyPressed(){
         if (app.keyPressed && !gameOver) {
-          if (app.keyCode == LEFT) {
-            bao.move(-1, 0);
-          } else if (app.keyCode == RIGHT) {
-            bao.move(1, 0);
-          } else if (app.keyCode == UP) {
+          if (app.keyCode == UP) {
             bao.move(0, -1);
           } else if (app.keyCode == DOWN) {
             bao.move(0, 1);
           } else {
             bao.move(0, 0);
           }
-          
           if (gameOver && app.keyCode == ENTER){
               ((Sketch)app).returnToMenu();
           }
@@ -93,7 +108,7 @@ public class Level1 extends Level {
         app.text("You Win!", app.width/2, 100);
         
         app.textSize(20);
-        app.text("After eating the dumpling, Bao is satisfied and goes back to bed.", app.width/2, 200);
+        app.text("Phew, Bao escaped for another day!", app.width/2, 200);
         
         app.textSize(20);
         app.text("Press Enter to exit", app.width/2, 800-100);
@@ -110,7 +125,7 @@ public class Level1 extends Level {
         app.text("Oh no!", app.width/2, 100);
         
         app.textSize(20);
-        app.text("How clumsy Bao is! Mom woke up and is coming down now...", app.width/2, 200);
+        app.text("Bao got slippered", app.width/2, 200);
         
         app.textSize(20);
         app.text("Press Enter to exit", app.width/2, 800-100);

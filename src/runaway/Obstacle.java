@@ -23,10 +23,10 @@ public class Obstacle {
 //       image = app.loadImage(path);
     }
 //    
-//    public void move (int dx, int dy){
-//        x += dx;
-//        y += dy;
-//    }
+    public void fly (int speed){
+        x -= speed; 
+        this.draw();
+    }
     
     public void draw(){
 //        app.fill(200);
