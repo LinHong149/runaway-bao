@@ -53,17 +53,23 @@ public class Level1 extends Level {
     
     public void keyPressed(){
         if (app.keyPressed) {
-          if (app.keyCode == LEFT) {
-            bao.move(-1, 0);
-          } else if (app.keyCode == RIGHT) {
-            bao.move(1, 0);
-          } else if (app.keyCode == UP) {
-            bao.move(0, -1);
-          } else if (app.keyCode == DOWN) {
-            bao.move(0, 1);
-          } else {
-            bao.move(0, 0);
-          }
+            switch (app.keyCode) {
+                case LEFT:
+                    bao.move(-1, 0);
+                    break;
+                case RIGHT:
+                    bao.move(1, 0);
+                    break;
+                case UP:
+                    bao.move(0, -1);
+                    break;
+                case DOWN:
+                    bao.move(0, 1);
+                    break;
+                default:
+                    bao.move(0, 0);
+                    break;
+            }
           
           if (gameOver && app.keyCode == ENTER){
               ((Sketch)app).returnToMenu();

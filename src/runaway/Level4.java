@@ -12,6 +12,8 @@ package runaway;
 import java.io.*;
 import java.util.Scanner;
 import processing.core.PApplet;
+import processing.core.PGraphics;
+import processing.core.PImage;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -22,26 +24,30 @@ import static processing.core.PConstants.RIGHT;
 import static processing.core.PConstants.UP;
 import static processing.core.PConstants.ENTER;
 
-public class Level3 extends Level {
+public class Level4 extends Level {
     private Bao bao;
-    private Goal[] g = new Goal[4];
+    private Obstacle[] o = new Obstacle[4];
     private PApplet app;
+    private int speed = 5;
     private boolean gameOver =false;
     private int startTime = -1;
     private int elapsedTime = 0;
     private final int TOTAL_DURATION = 60_000;
     private int goToX = 100, goToY= 100;
-    private ArrayList<Goal> toDisplay;
+    private ArrayList<Obstacle> toDisplay;
+    PGraphics maskLayer;
+    private int confidenceL = 200;
     
-    public Level3(PApplet app){
-        super(app, 3);
+    public Level4(PApplet app){
+        super(app, 4);
         this.app = app;
-        bao = new Bao(app, 100, 100, 5, ""); 
-        g[0] = new Goal(app, 200, 200, "");
-        g[1] = new Goal(app, 200, 200, "");
-        g[2] = new Goal(app, 200, 200, "");
-        g[3] = new Goal(app, 200, 200, "");
-        toDisplay = new ArrayList<>(Arrays.asList(g));
+        bao = new Bao(app, 100, 100, speed, ""); 
+        o[0] = new Obstacle(app, 200, 200, "");
+        o[1] = new Obstacle(app, 200, 200, "");
+        o[2] = new Obstacle(app, 200, 200, "");
+        o[3] = new Obstacle(app, 200, 200, "");
+        toDisplay = new ArrayList<>(Arrays.asList(o));
+        maskLayer = app.createGraphics(1600, 1200);
     }
     
     @Override
@@ -49,30 +55,77 @@ public class Level3 extends Level {
         if (startTime == -1){
             startTime = app.millis();
         }
-        
         elapsedTime = app.millis() - startTime;
+        confidenceL = 200 - 2*(elapsedTime)/1000;
         if (!gameOver && elapsedTime >= TOTAL_DURATION){
             endScreen();
             return;
         }
-        
         app.fill(100);
         app.text("Time Left: "+Math.max(0, (TOTAL_DURATION-elapsedTime)/1000), 1050, 50);
         
         
-        bao.draw();
-        for (Goal goal: toDisplay){
-            goal.draw();
-        }
-        mousePressed();
-        drawCollisions();
         
-        bao.moveTo(goToX, goToY);
+        bao.draw();
+        for (Obstacle obs: toDisplay){
+            obs.draw();
+        }
+        
+        
+        app.fill(255,0,0);
+        maskLayer.beginDraw();
+        maskLayer.background(0);
+        maskLayer.noStroke();
+        
+        float steps = 100;
+        for (int i = 100; i > 0; i--) {
+          float alpha = app.map(i, 0, steps, 255, 0); // more transparent on outside
+          float r = app.map(i, 0, steps, 0, confidenceL);
+          maskLayer.fill(alpha);
+          maskLayer.ellipse(goToX, goToY, r * 2, r * 2);
+        }
+
+        maskLayer.endDraw();
+        PImage maskImg = maskLayer.get();
+        maskImg.filter(app.INVERT);
+//        
+        PGraphics blackScreen = app.createGraphics(1600, 1200);
+        blackScreen.beginDraw();
+        blackScreen.background(0);
+        blackScreen.endDraw();
+        
+        blackScreen.mask(maskImg);  
+        app.image(blackScreen,0,0);
+        
+        drawCollisions();
 //        drawCollisions();
     }
+
     
     public void keyPressed(){
         if (app.keyPressed) {
+            switch (app.keyCode) {
+                case LEFT:
+                    bao.move(-1, 0);
+                    goToX -=speed;
+                    break;
+                case RIGHT:
+                    bao.move(1, 0);
+                    goToX+=speed;
+                    break;
+                case UP:
+                    bao.move(0, -1);
+                    goToY-=speed;
+                    break;
+                case DOWN:
+                    bao.move(0, 1);
+                    goToY+=speed;
+                    break;
+                default:
+                    bao.move(0, 0);
+                    break;
+            }
+            
           if (gameOver && app.keyCode == ENTER){
               ((Sketch)app).returnToMenu();
           }
@@ -80,25 +133,15 @@ public class Level3 extends Level {
     }
     
     public void drawCollisions(){
-        for (Goal goal : toDisplay){
-            if (bao.isCollidingWith(goal)){
+        for (Obstacle obs : toDisplay){
+            if (bao.isCollidingWith(obs)){
 //                play animation of collecting goal
-                toDisplay.remove(goal);
+                toDisplay.remove(obs);
                 return;
             }
         }
     }
     
-    public void mousePressed(){
-        if (app.mousePressed){
-            for (Goal goal:toDisplay){
-                if (goal.isClicked(app.mouseX, app.mouseY)){
-                    goToX = app.mouseX;
-                    goToY = app.mouseY;
-                }
-            }
-        }
-    }
     
     public void winScreen(){
         gameOver = true;

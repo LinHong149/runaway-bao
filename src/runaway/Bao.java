@@ -31,14 +31,14 @@ public class Bao {
     
     public void moveTo(int x, int y){
             if (this.x > x){
-                this.x --;
-            } else{
-                this.x++;
+                this.x -=2;
+            } else if (this.x < x){
+                this.x+=2;
             }
            if (this.y > y){
-                this.y --;
-            } else{
-                this.y++;
+                this.y -=2;
+            } else if (this.y < y){
+                this.y+=2;
             }
     }
     
@@ -57,7 +57,6 @@ public class Bao {
         float d = PApplet.dist(otherCenterX, otherCenterY, centerX, centerY);
         
         return d<72;
-  
     } 
     
     

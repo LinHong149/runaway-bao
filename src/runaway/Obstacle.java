@@ -16,10 +16,12 @@ public class Obstacle {
     public int width = 72, height = 72;
     private PApplet app;
     private PImage image;
+    public static int nObstacles = 0;
     public Obstacle(PApplet p, int x, int y, String path){
         this.app = p;
         this.x = x;
         this.y = y;
+        nObstacles ++;
 //       image = app.loadImage(path);
     }
 //    

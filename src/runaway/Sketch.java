@@ -86,6 +86,19 @@ public class Sketch extends PApplet{
                 
             }
             break;
+        case 4:
+            background(255);
+            if (inPrelude){
+                level = new Level4(this);
+                level.loadPrelude();
+                levelInited = true;
+                continueActivated = true; // loads level
+            }
+            else {
+            level.loadLevel();
+                
+            }
+            break;
       }
       
       
@@ -151,23 +164,5 @@ public class Sketch extends PApplet{
        userInput = "";
       
   }
-//
-//    public void drawCollisions(){
-//        if (bao.isCollidingWith(car2)){
-//            fill(255, 0,0);
-//            this.text("ouch", car1.x, car1.y);
-//            this.text("ouch", car2.x, car2.y);
-//        }
-//    }
-//
-
-//    public void mousePressed(){
-//        if (car1.isClicked(mouseX, mouseY)){
-//            showInfo = !showInfo;
-//        } else{
-//            showInfo = false;
-//        }
-//    }
-    
     
 }
