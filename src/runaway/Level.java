@@ -13,7 +13,11 @@ package runaway;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 import processing.core.PApplet;
 
@@ -73,4 +77,20 @@ public class Level {
     
     public void keyPressed(){}
     public void keyReleased(){}
+    public void writeScore(int level, int elapsedTime){
+        try{
+            Path path = Paths.get("score.txt");
+            List<String> lines = Files.readAllLines(path);
+
+            if (level > 0 && level <= lines.size()) {
+                lines.set(level - 1, "Level "+level+ ": "+elapsedTime/1000+"s"); 
+                Files.write(path, lines);
+            } else {
+                System.out.println("Invalid line number.");
+            }
+        } catch(IOException e){
+        System.out.println(e);
+        }
+    }
+    
 }

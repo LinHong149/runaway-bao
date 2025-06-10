@@ -9,9 +9,10 @@ package runaway;
  * @author linhong
  */
 
-import java.io.*;
-import java.util.Scanner;
 import processing.core.PApplet;
+import java.io.*;
+import java.nio.file.*;
+import java.util.*;
 
 
 import static processing.core.PConstants.DOWN;
@@ -25,7 +26,10 @@ public class Level1 extends Level {
     private Obstacle[] o = new Obstacle[12];
     private Goal goal;
     private PApplet app;
+    private int startTime = -1;
+    private int elapsedTime = 0;
     private boolean gameOver =false;
+    private boolean wroteScore = false;
     public Level1(PApplet app){
         super(app, 1);
         this.app = app;
@@ -41,6 +45,13 @@ public class Level1 extends Level {
     public void loadLevel(){
 //        super.loadLevel();
 //        System.out.println("Loading level");
+
+        if (startTime == -1) {
+            startTime = app.millis();
+        }
+
+        elapsedTime = app.millis() - startTime;
+        
         app.fill(100);
         bao.draw();
         o[0].draw();
@@ -103,7 +114,13 @@ public class Level1 extends Level {
         
         app.textSize(20);
         app.text("Press Enter to exit", app.width/2, 800-100);
+        
+        if (!wroteScore){
+            super.writeScore(1, elapsedTime);
+        }
+        wroteScore = true;
     }
+    
     
     
     public void endScreen(){

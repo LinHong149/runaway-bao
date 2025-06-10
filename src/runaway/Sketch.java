@@ -5,6 +5,8 @@
 package runaway;
 import processing.core.PApplet;
 import processing.core.PImage;
+import java.io.*;
+import java.util.Scanner;
 
 import static processing.core.PConstants.DOWN;
 import static processing.core.PConstants.LEFT;
@@ -22,6 +24,7 @@ public class Sketch extends PApplet{
     private boolean levelInited = false;
     private boolean continueActivated = false;
     private boolean inPrelude = true;
+    private boolean showScore = false;
 
     // Button positions
     private int buttonWidth = 200;
@@ -46,6 +49,9 @@ public class Sketch extends PApplet{
         switch (currLevel) {
             case 0:
                 drawMainMenu();
+                if (showScore){
+                    showHighScore();
+                }
                 break;
             case 1:
                 runLevel(new Level1(this));
@@ -74,23 +80,30 @@ public class Sketch extends PApplet{
             level.loadLevel();
         }
     }
-        private void drawMainMenu() {
-            background(255);
-            fill(0);
-            textAlign(CENTER, CENTER);
-            textSize(36);
-            text("Choose a Level", width / 2, 100);
+    private void drawMainMenu() {
+        background(255);
+        fill(0);
+        textAlign(CENTER, CENTER);
+        textSize(36);
+        text("Choose a Level", width / 2, 100);
 
-            for (int i = 1; i <= 4; i++) {
-                int x = buttonStartX + (i - 1) * (buttonWidth + buttonSpacing);
-                int y = buttonStartY;
-                fill(200);
-                rect(x, y, buttonWidth, buttonHeight, 10);
-                fill(0);
-                textSize(20);
-                text("Level " + i, x + buttonWidth / 2, y + buttonHeight / 2);
-            }
+        for (int i = 1; i <= 4; i++) {
+            int x = buttonStartX + (i - 1) * (buttonWidth + buttonSpacing);
+            int y = buttonStartY;
+            fill(200);
+            rect(x, y, buttonWidth, buttonHeight, 10);
+            fill(0);
+            textSize(20);
+            text("Level " + i, x + buttonWidth / 2, y + buttonHeight / 2);
         }
+        
+        fill(200);
+        rect(120, 400, buttonWidth, buttonHeight, 10);
+        fill(0);
+        textSize(20);
+        text("View HighScores", 120 + buttonWidth / 2, 400+buttonHeight / 2);
+                
+    }
     
     
     public void keyPressed(){
@@ -131,6 +144,24 @@ public class Sketch extends PApplet{
                     currLevel = i;
                 }
             }
+            if (mouseX >= 120 && mouseX <= 120 + buttonWidth &&
+                mouseY >= 400 && mouseY <= 400 + buttonHeight) {
+                showScore=!showScore;
+            }
+        }
+    }
+    
+    public void showHighScore(){
+        try{
+            Scanner file = new Scanner(new File("score.txt"));
+            int y = 500;
+            while(file.hasNext()){
+                textAlign(TOP,LEFT);
+                text(file.nextLine(), 120, y);
+                y+=50;
+            }
+        } catch(IOException e){
+            System.out.println(e);
         }
     }
     

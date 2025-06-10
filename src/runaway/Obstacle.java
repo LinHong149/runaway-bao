@@ -26,6 +26,12 @@ public class Obstacle {
 //       image = app.loadImage(path);
     }
 //    
+    public void fly (int speed, int y){
+        this.y= y;
+        x -= speed; 
+        this.draw();
+    }
+    
     public void fly (int speed){
         x -= speed; 
         this.draw();

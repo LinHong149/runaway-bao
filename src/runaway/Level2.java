@@ -23,7 +23,6 @@ import static processing.core.PConstants.ENTER;
 public class Level2 extends Level {
     private Bao bao;
     private Obstacle[] o = new Obstacle[12];
-    private Goal goal;
     private PApplet app;
     private boolean gameOver =false;
     private int startTime = -1;
@@ -45,7 +44,6 @@ public class Level2 extends Level {
             o[i].speed = (int) app.random(6, 13); // speed 6–12
         }
 
-        goal = new Goal(app, 1150, 400, "");
     }
     
     @Override
@@ -65,7 +63,6 @@ public class Level2 extends Level {
         app.text("Time Left: " + Math.max(0, (WIN_DURATION - elapsedTime) / 1000), 1050, 50);
 
         bao.draw();
-        goal.draw();
         if (movingUp) bao.move(0, -1);
         if (movingDown) bao.move(0, 1);
 
@@ -105,9 +102,6 @@ public class Level2 extends Level {
     }
 
     public void drawCollisions(){
-        if (bao.isCollidingWith(goal)){
-            winScreen();
-        }
         for (Obstacle ob : o){
             if (ob != null && bao.isCollidingWith(ob)){
                 endScreen();
