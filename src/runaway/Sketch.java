@@ -23,6 +23,12 @@ public class Sketch extends PApplet{
     private boolean continueActivated = false;
     private boolean inPrelude = true;
 
+    // Button positions
+    private int buttonWidth = 200;
+    private int buttonHeight = 60;
+    private int buttonSpacing = 80;
+    private int buttonStartX = 120;
+    private int buttonStartY = 200;
 
     public void settings() {
       size(1200,800);
@@ -37,93 +43,54 @@ public class Sketch extends PApplet{
     }
 
     public void draw() {
-      switch (currLevel) {
-        case 0:
-//            System.out.println("0");
+        switch (currLevel) {
+            case 0:
+                drawMainMenu();
+                break;
+            case 1:
+                runLevel(new Level1(this));
+                break;
+            case 2:
+                runLevel(new Level2(this));
+                break;
+            case 3:
+                runLevel(new Level3(this));
+                break;
+            case 4:
+                runLevel(new Level4(this));
+                break;
+        }
+    }
+      
+    private void runLevel(Level newLevel) {
+        textAlign(TOP, LEFT);
+        background(255);
+        if (inPrelude) {
+            level = newLevel;
+            level.loadPrelude();
+            levelInited = true;
+            continueActivated = true;
+        } else {
+            level.loadLevel();
+        }
+    }
+        private void drawMainMenu() {
             background(255);
             fill(0);
-            textAlign(LEFT, BASELINE);
-            text("Choose Level: ", 20, 50);
-            text(userInput, 20, 100);
-            break;
-        case 1:
-            background(255);
-            if (inPrelude){
-                level = new Level1(this);
-                level.loadPrelude();
-                levelInited = true;
-                continueActivated = true; // loads level
-            }
-            else {
-            level.loadLevel();
-                
-            }
-            break;
-            
-        case 2:
-            background(255);
-            if (inPrelude){
-                level = new Level2(this);
-                level.loadPrelude();
-                levelInited = true;
-                continueActivated = true; // loads level
-            }
-            else {
-            level.loadLevel();
-                
-            }
-            break;
-        case 3:
-            background(255);
-            if (inPrelude){
-                level = new Level3(this);
-                level.loadPrelude();
-                levelInited = true;
-                continueActivated = true; // loads level
-            }
-            else {
-            level.loadLevel();
-                
-            }
-            break;
-        case 4:
-            background(255);
-            if (inPrelude){
-                level = new Level4(this);
-                level.loadPrelude();
-                levelInited = true;
-                continueActivated = true; // loads level
-            }
-            else {
-            level.loadLevel();
-                
-            }
-            break;
-      }
-      
-      
-//      Select Levels
-        
+            textAlign(CENTER, CENTER);
+            textSize(36);
+            text("Choose a Level", width / 2, 100);
 
-//      bao.draw();
-
-
-//      if (keyPressed) {
-//          if (keyCode == LEFT) {
-//            bao.move(-5, 0);
-//          } else if (keyCode == RIGHT) {
-//            bao.move(5, 0);
-//          } else if (keyCode == UP) {
-//            bao.move(0, -5);
-//          } else if (keyCode == DOWN) {
-//            bao.move(0, 5);
-//          } else {
-//            bao.move(0, 0);
-//          }
-//      }
-//      bao.draw();
-//      drawCollisions();
-    }
+            for (int i = 1; i <= 4; i++) {
+                int x = buttonStartX + (i - 1) * (buttonWidth + buttonSpacing);
+                int y = buttonStartY;
+                fill(200);
+                rect(x, y, buttonWidth, buttonHeight, 10);
+                fill(0);
+                textSize(20);
+                text("Level " + i, x + buttonWidth / 2, y + buttonHeight / 2);
+            }
+        }
     
     
     public void keyPressed(){
@@ -154,15 +121,26 @@ public class Sketch extends PApplet{
     }
   }
     
-  public void returnToMenu(){
-      System.out.println("returning to main");
-      currLevel = 0;
-      level = new Level(this,0);
-       levelInited = false;
-       continueActivated = false;
-       inPrelude = true;
-       userInput = "";
-      
-  }
+    public void mousePressed() {
+        if (currLevel == 0) {
+            for (int i = 1; i <= 4; i++) {
+                int x = buttonStartX + (i - 1) * (buttonWidth + buttonSpacing);
+                int y = buttonStartY;
+                if (mouseX >= x && mouseX <= x + buttonWidth &&
+                    mouseY >= y && mouseY <= y + buttonHeight) {
+                    currLevel = i;
+                }
+            }
+        }
+    }
+    
+   public void returnToMenu() {
+        System.out.println("Returning to main menu");
+        currLevel = 0;
+        level = new Level(this, 0);
+        levelInited = false;
+        continueActivated = false;
+        inPrelude = true;
+    }
     
 }
