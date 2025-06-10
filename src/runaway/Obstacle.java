@@ -15,6 +15,7 @@ public class Obstacle {
     public int x, y;
     public int width = 72, height = 72;
     private PApplet app;
+    public int speed = 0;
     private PImage image;
     public static int nObstacles = 0;
     public Obstacle(PApplet p, int x, int y, String path){

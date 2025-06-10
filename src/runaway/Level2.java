@@ -29,67 +29,81 @@ public class Level2 extends Level {
     private int startTime = -1;
     private int elapsedTime = 0;
     private final int WIN_DURATION = 60_000;
+    private boolean movingUp = false;
+    private boolean movingDown = false;
     
-    public Level2(PApplet app){
+    public Level2(PApplet app) {
         super(app, 2);
         this.app = app;
-        bao = new Bao(app, 100, 100, 8 , ""); 
-        o[0] = new Obstacle(app, 1800, 200, "");
-        o[1] = new Obstacle(app, 1800, 200, "");
-        o[2] = new Obstacle(app, 1800, 100, "");
-        o[3] = new Obstacle(app, 1800, 300, "");
+        bao = new Bao(app, 100, 100, 6, "");
+
+        int spacing = 250; // horizontal spacing between projectiles
+        for (int i = 0; i < 12; i++) {
+            int x = app.width + i * spacing;
+            int y = (int) app.random(50, app.height - 50);
+            o[i] = new Obstacle(app, x, y, "");
+            o[i].speed = (int) app.random(6, 13); // speed 6–12
+        }
+
         goal = new Goal(app, 1150, 400, "");
     }
     
     @Override
-    public void loadLevel(){
-        if (startTime == -1){
+    public void loadLevel() {
+        if (startTime == -1) {
             startTime = app.millis();
         }
-        
+
         elapsedTime = app.millis() - startTime;
-        if (!gameOver && elapsedTime >= WIN_DURATION){
+        if (!gameOver && elapsedTime >= WIN_DURATION) {
             winScreen();
             return;
-                   }
-//        super.loadLevel();
-//        System.out.println("Loading level");
+        }
+
         app.fill(100);
         app.textSize(20);
-        app.text("Time Left: "+Math.max(0, (WIN_DURATION-elapsedTime)/1000), 1050, 50);
-        
-        
+        app.text("Time Left: " + Math.max(0, (WIN_DURATION - elapsedTime) / 1000), 1050, 50);
+
         bao.draw();
-        if (!gameOver){
-            
-        o[0].fly(8);
-        o[1].fly(6);
-        o[2].fly(5);
-        o[3].fly(7);
-        
+        goal.draw();
+        if (movingUp) bao.move(0, -1);
+        if (movingDown) bao.move(0, 1);
+
+        if (!gameOver) {
+            for (int i = 0; i < o.length; i++) {
+                o[i].fly(o[i].speed);
+                o[i].draw();
+
+                if (o[i].x < -o[i].width) {
+                    o[i].x = app.width + (int) app.random(50, 200);
+                    o[i].y = (int) app.random(50, app.height - 50);
+                    o[i].speed = (int) app.random(6, 10);
+                }
+            }
         }
+
         drawCollisions();
     }
     
-    public void keyPressed(){
-        if (app.keyPressed) {
-            switch (app.keyCode) {
-                case UP:
-                    bao.move(0, -1);
-                    break;
-                case DOWN:
-                    bao.move(0, 1);
-                    break;
-                default:
-                    bao.move(0, 0);
-                    break;
-            }
-          if (gameOver && app.keyCode == ENTER){
-              ((Sketch)app).returnToMenu();
-          }
-      }
+    
+
+    @Override
+    public void keyPressed() {
+        if (gameOver && app.keyCode == ENTER) {
+            ((Sketch) app).returnToMenu();
+            return;
+        }
+
+        if (app.keyCode == UP) movingUp = true;
+        else if (app.keyCode == DOWN) movingDown = true;
     }
     
+    @Override
+    public void keyReleased() {
+        if (app.keyCode == UP) movingUp = false;
+        else if (app.keyCode == DOWN) movingDown = false;
+    }
+
     public void drawCollisions(){
         if (bao.isCollidingWith(goal)){
             winScreen();

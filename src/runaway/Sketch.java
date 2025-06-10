@@ -143,4 +143,10 @@ public class Sketch extends PApplet{
         inPrelude = true;
     }
     
+   @Override
+    public void keyReleased() {
+        if (level != null) {
+            level.keyReleased();
+        }
+    }
 }

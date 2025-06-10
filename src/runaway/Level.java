@@ -72,4 +72,5 @@ public class Level {
     }
     
     public void keyPressed(){}
+    public void keyReleased(){}
 }
