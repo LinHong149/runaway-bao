@@ -12,6 +12,7 @@ package runaway;
 import java.io.*;
 import java.util.Scanner;
 import processing.core.PApplet;
+import processing.core.PImage;
 
 
 import static processing.core.PConstants.DOWN;
@@ -24,17 +25,24 @@ public class Level2 extends Level {
     private Bao bao;
     private Obstacle[] o = new Obstacle[12];
     private PApplet app;
+    private static PImage image;
     private boolean gameOver =false;
     private int startTime = -1;
     private int elapsedTime = 0;
     private final int WIN_DURATION = 60_000;
     private boolean movingUp = false;
     private boolean movingDown = false;
+    public static boolean img = false;
     
     public Level2(PApplet app) {
         super(app, 2);
         this.app = app;
         bao = new Bao(app, 100, 100, 6, "");
+        
+        if (!img){
+            image = app.loadImage("images/Level2BG.png");
+            img = true;
+        }
 
         int spacing = 250; // horizontal spacing between projectiles
         for (int i = 0; i < 12; i++) {
@@ -42,6 +50,7 @@ public class Level2 extends Level {
             int y = (int) app.random(50, app.height - 50);
             o[i] = new Obstacle(app, x, y, "");
             o[i].speed = (int) app.random(6, 13); // speed 6–12
+            
         }
 
     }
@@ -58,7 +67,7 @@ public class Level2 extends Level {
             return;
         }
 
-        app.fill(100);
+        app.image(image,-400,-250, 1600, 1600);
         app.textSize(20);
         app.text("Time Left: " + Math.max(0, (WIN_DURATION - elapsedTime) / 1000), 1050, 50);
 

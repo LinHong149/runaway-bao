@@ -14,6 +14,7 @@ import java.util.Scanner;
 import processing.core.PApplet;
 import java.util.ArrayList;
 import java.util.Arrays;
+import processing.core.PImage;
 
 
 import static processing.core.PConstants.DOWN;
@@ -26,6 +27,7 @@ public class Level3 extends Level {
     private Bao bao;
     private Goal[] g = new Goal[4];
     private PApplet app;
+    private PImage image;
     private boolean gameOver =false;
     private int startTime = -1;
     private int elapsedTime = 0;
@@ -68,7 +70,6 @@ public class Level3 extends Level {
         drawCollisions();
         
         bao.moveTo(goToX, goToY);
-//        drawCollisions();
     }
     
     public void keyPressed(){
@@ -80,6 +81,9 @@ public class Level3 extends Level {
     }
     
     public void drawCollisions(){
+        if (toDisplay.isEmpty()){
+             winScreen();
+       }
         for (Goal goal : toDisplay){
             if (bao.isCollidingWith(goal)){
 //                play animation of collecting goal

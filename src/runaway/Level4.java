@@ -24,12 +24,13 @@ public class Level4 extends Level {
     private Goal goal;
 
     private PApplet app;
+    private PImage image;
     private PGraphics maskLayer;
 
     private boolean gameOver = false;
     private int startTime = -1;
     private int elapsedTime = 0;
-    private final int TOTAL_DURATION = 60_000;
+    private final int TOTAL_DURATION = 10_000;
 
     private int confidenceL = 200;
     private int speed = 5;
@@ -58,8 +59,8 @@ public class Level4 extends Level {
 
         elapsedTime = app.millis() - startTime;
 
-        if (!gameOver && elapsedTime >= TOTAL_DURATION) {
-            endScreen();
+        if (elapsedTime >= TOTAL_DURATION) {
+            timeUp();
             return;
         }
 
@@ -68,13 +69,8 @@ public class Level4 extends Level {
         confidenceL = (int) app.map(dist, 0, 1000, 250, 120);
         confidenceL = PApplet.constrain(confidenceL, 120, 250);
         
-        
-        
-
         // Draw game objects
         app.fill(100);
-        app.text("Time Left: " + Math.max(0, (TOTAL_DURATION - elapsedTime) / 1000), 1050, 50);
-
         goal.draw();
         bao.draw();
         for (Obstacle obs : toDisplay) {
@@ -122,7 +118,9 @@ public class Level4 extends Level {
         app.fill(0, 200, 0); // green fill
         app.rect(20, 45, barWidth, barHeight);
         
-         
+        app.fill(255);
+        app.text("Time Left: " + Math.max(0, (TOTAL_DURATION - elapsedTime) / 1000), 1050, 50);
+        
         drawCollisions();
     }
 
@@ -181,6 +179,7 @@ public class Level4 extends Level {
 
     public void endScreen() {
         gameOver = true;
+        System.out.println("End screen 4");
         app.background(255);
         app.fill(100);
         app.textAlign(PApplet.CENTER, PApplet.CENTER);
@@ -189,6 +188,22 @@ public class Level4 extends Level {
 
         app.textSize(20);
         app.text("Bao wandered too long and got caught!", app.width / 2, 200);
+        app.text("Press Enter to exit", app.width / 2, app.height - 100);
+    }
+    
+    
+
+    public void timeUp() {
+        gameOver = true;
+        System.out.println("End screen 4");
+        app.background(255);
+        app.fill(100);
+        app.textAlign(PApplet.CENTER, PApplet.CENTER);
+        app.textSize(40);
+        app.text("Oh no!", app.width / 2, 100);
+
+        app.textSize(20);
+        app.text("Bao wandered too long and lost his confidence.", app.width / 2, 200);
         app.text("Press Enter to exit", app.width / 2, app.height - 100);
     }
 }

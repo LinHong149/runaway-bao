@@ -10,6 +10,7 @@ package runaway;
  */
 
 import processing.core.PApplet;
+import processing.core.PImage;
 import java.io.*;
 import java.nio.file.*;
 import java.util.*;
@@ -20,25 +21,33 @@ import static processing.core.PConstants.LEFT;
 import static processing.core.PConstants.RIGHT;
 import static processing.core.PConstants.UP;
 import static processing.core.PConstants.ENTER;
+import static runaway.Level2.img;
 
 public class Level1 extends Level {
     private Bao bao;
     private Obstacle[] o = new Obstacle[12];
     private Goal goal;
     private PApplet app;
+    private static PImage image;
+    private static PImage gImage;
     private int startTime = -1;
     private int elapsedTime = 0;
     private boolean gameOver =false;
     private boolean wroteScore = false;
+    public static boolean img = false;
     public Level1(PApplet app){
         super(app, 1);
         this.app = app;
-        bao = new Bao(app, 100, 100, 5, ""); 
+        bao = new Bao(app, 1000, 750, 5, ""); 
         goal = new Goal(app, 400, 400, "");
         o[0] = new Obstacle(app, 200, 200, "");
         o[1] = new Obstacle(app, 100, 200, "");
         o[2] = new Obstacle(app, 200, 100, "");
         o[3] = new Obstacle(app, 200, 300, "");
+        if (!img){
+            image = app.loadImage("images/Level1BG.png");
+            img = true;
+        }
     }
     
     @Override
@@ -52,7 +61,7 @@ public class Level1 extends Level {
 
         elapsedTime = app.millis() - startTime;
         
-        app.fill(100);
+        app.image(image,0,-200, 1200, 1409);
         bao.draw();
         o[0].draw();
         o[1].draw();

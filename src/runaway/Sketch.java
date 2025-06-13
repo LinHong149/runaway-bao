@@ -30,7 +30,7 @@ public class Sketch extends PApplet{
     private int buttonWidth = 200;
     private int buttonHeight = 60;
     private int buttonSpacing = 80;
-    private int buttonStartX = 120;
+    private int buttonStartX = 80;
     private int buttonStartY = 200;
 
     public void settings() {
@@ -98,10 +98,10 @@ public class Sketch extends PApplet{
         }
         
         fill(200);
-        rect(120, 400, buttonWidth, buttonHeight, 10);
+        rect(80, 400, buttonWidth, buttonHeight, 10);
         fill(0);
         textSize(20);
-        text("View HighScores", 120 + buttonWidth / 2, 400+buttonHeight / 2);
+        text("View HighScores", 80 + buttonWidth / 2, 400+buttonHeight / 2);
                 
     }
     
@@ -144,7 +144,7 @@ public class Sketch extends PApplet{
                     currLevel = i;
                 }
             }
-            if (mouseX >= 120 && mouseX <= 120 + buttonWidth &&
+            if (mouseX >= 80 && mouseX <= 80 + buttonWidth &&
                 mouseY >= 400 && mouseY <= 400 + buttonHeight) {
                 showScore=!showScore;
             }
@@ -157,7 +157,7 @@ public class Sketch extends PApplet{
             int y = 500;
             while(file.hasNext()){
                 textAlign(TOP,LEFT);
-                text(file.nextLine(), 120, y);
+                text(file.nextLine(), 80, y);
                 y+=50;
             }
         } catch(IOException e){
