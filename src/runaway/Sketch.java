@@ -14,37 +14,61 @@ import static processing.core.PConstants.RIGHT;
 import static processing.core.PConstants.UP;
 
 /**
+ * The main game window and controller class.
+ * This class handles the game's main menu, level selection, and game state management.
+ * It extends PApplet to provide the game's rendering and input handling capabilities.
  *
  * @author linhong
  */
-public class Sketch extends PApplet{
+public class Sketch extends PApplet {
+    /** The current level instance */
     private Level level;
+    /** The current level number (0 for menu) */
     private int currLevel = 0;
+    /** User input for level selection */
     private String userInput = "";
+    /** Whether the current level has been initialized */
     private boolean levelInited = false;
+    /** Whether the continue prompt is active */
     private boolean continueActivated = false;
+    /** Whether the level is in prelude state */
     private boolean inPrelude = true;
+    /** Whether to show high scores */
     private boolean showScore = false;
 
     // Button positions
+    /** Width of menu buttons */
     private int buttonWidth = 200;
+    /** Height of menu buttons */
     private int buttonHeight = 60;
+    /** Spacing between menu buttons */
     private int buttonSpacing = 80;
+    /** Starting X position of menu buttons */
     private int buttonStartX = 80;
+    /** Starting Y position of menu buttons */
     private int buttonStartY = 200;
 
+    /**
+     * Sets up the window size and other Processing settings.
+     */
     public void settings() {
-      size(1200,800);
+        size(1200, 800);
     }
 
+    /**
+     * Initializes the game state and loads initial resources.
+     */
     public void setup() {
-      background(255);
-      textSize(20);
-      level = new Level(this,0);
-      
+        background(255);
+        textSize(20);
+        level = new Level(this, 0);
+        
 //      bao = new Bao(this, 100, 100, ""); 
     }
 
+    /**
+     * Main game loop. Handles rendering of the current game state.
+     */
     public void draw() {
         switch (currLevel) {
             case 0:
@@ -62,12 +86,15 @@ public class Sketch extends PApplet{
             case 3:
                 runLevel(new Level3(this));
                 break;
-            case 4:
-                runLevel(new Level4(this));
-                break;
         }
     }
       
+    /**
+     * Runs a specific level instance.
+     * Handles both prelude and gameplay states.
+     *
+     * @param newLevel The level instance to run
+     */
     private void runLevel(Level newLevel) {
         textAlign(TOP, LEFT);
         background(255);
@@ -80,6 +107,10 @@ public class Sketch extends PApplet{
             level.loadLevel();
         }
     }
+
+    /**
+     * Renders the main menu with level selection buttons and high score option.
+     */
     private void drawMainMenu() {
         background(255);
         fill(0);
@@ -87,7 +118,7 @@ public class Sketch extends PApplet{
         textSize(36);
         text("Choose a Level", width / 2, 100);
 
-        for (int i = 1; i <= 4; i++) {
+        for (int i = 1; i <= 3; i++) {
             int x = buttonStartX + (i - 1) * (buttonWidth + buttonSpacing);
             int y = buttonStartY;
             fill(200);
@@ -105,7 +136,9 @@ public class Sketch extends PApplet{
                 
     }
     
-    
+    /**
+     * Handles keyboard input for level selection and game control.
+     */
     public void keyPressed(){
     
     if (currLevel==0){
@@ -134,9 +167,12 @@ public class Sketch extends PApplet{
     }
   }
     
+    /**
+     * Handles mouse input for menu button interaction.
+     */
     public void mousePressed() {
         if (currLevel == 0) {
-            for (int i = 1; i <= 4; i++) {
+            for (int i = 1; i <= 3; i++) {
                 int x = buttonStartX + (i - 1) * (buttonWidth + buttonSpacing);
                 int y = buttonStartY;
                 if (mouseX >= x && mouseX <= x + buttonWidth &&
@@ -151,6 +187,9 @@ public class Sketch extends PApplet{
         }
     }
     
+    /**
+     * Displays the high scores loaded from score.txt.
+     */
     public void showHighScore(){
         try{
             Scanner file = new Scanner(new File("score.txt"));
@@ -165,16 +204,25 @@ public class Sketch extends PApplet{
         }
     }
     
-   public void returnToMenu() {
+    /**
+     * Returns to the main menu and resets game state.
+     */
+    public void returnToMenu() {
         System.out.println("Returning to main menu");
         currLevel = 0;
         level = new Level(this, 0);
         levelInited = false;
         continueActivated = false;
         inPrelude = true;
+        
+        // Reset obstacle image for next round
+        Obstacle.resetImage();
     }
     
-   @Override
+    /**
+     * Handles key release events and passes them to the current level.
+     */
+    @Override
     public void keyReleased() {
         if (level != null) {
             level.keyReleased();
